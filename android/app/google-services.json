@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "685301090571",
+    "project_id": "taskschedular-56db9",
+    "storage_bucket": "taskschedular-56db9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685301090571:android:046ab299b0ff138232ba0e",
+        "android_client_info": {
+          "package_name": "com.example.tasks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkIFuDSIZ75-aauUchxzL4R_EVJrz3xpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685301090571:android:f236a2e53fd0558b32ba0e",
+        "android_client_info": {
+          "package_name": "com.example.taskschedular"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkIFuDSIZ75-aauUchxzL4R_EVJrz3xpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
