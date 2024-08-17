@@ -1,25 +1,33 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+
+import 'package:dotted_border/dotted_border.dart';
 
 class DottedBoder extends StatelessWidget {
   final String timings;
-  final Color color;
-  final Color containerColors;
+  final bool isSelected;
+  final bool isBlocked;
+
   const DottedBoder({
     super.key,
     required this.timings,
-    required this.color,
-    required this.containerColors,
+    this.isSelected = false,
+    this.isBlocked = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        color: containerColors,
+        color: isBlocked ? Colors.red.withOpacity(0.1) : Colors.white,
         width: double.infinity,
         child: DottedBorder(
-          color: color,
+          color: isBlocked
+              ? Colors.red
+              : isSelected
+                  ? Colors.blue
+                  : Colors.grey,
+          dashPattern: const [10, 3],
+          strokeWidth: isSelected ? 2 : 1,
           padding: const EdgeInsets.symmetric(
             vertical: 10,
           ),

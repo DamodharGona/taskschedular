@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:taskschedular/components/button.dart';
-import 'package:taskschedular/components/create_button.dart';
-import 'package:taskschedular/components/my_textfield.dart';
-import 'package:taskschedular/components/time_data_components.dart';
+
+import 'package:taskschedular/widgets/button.dart';
+import 'package:taskschedular/widgets/create_button.dart';
+import 'package:taskschedular/widgets/my_textfield.dart';
+import 'package:taskschedular/widgets/time_data_components.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -16,7 +17,7 @@ class _TaskPageState extends State<TaskPage> {
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
 
-  List<Map<String, String>> _tasks = [];
+  final List<Map<String, String>> _tasks = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(

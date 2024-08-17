@@ -1,6 +1,11 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:taskschedular/intro_page.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:taskschedular/bloc/auth_bloc/auth_bloc.dart';
+import 'package:taskschedular/bloc/subject_bloc/subject_bloc.dart';
+import 'package:taskschedular/screens/on-boarding/splash_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -11,7 +16,15 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => SubjectBloc()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -25,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         useMaterial3: true,
       ),
-      home: const IntroPage(),
+      home: const SplashScreen(),
     );
   }
 }

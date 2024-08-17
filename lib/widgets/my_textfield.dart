@@ -17,12 +17,17 @@ class MyTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle:  TextStyle(
+        hintStyle: TextStyle(
           color: color,
           fontSize: 23,
           fontWeight: FontWeight.bold,
         ),
+        focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
+      ),
+      style: const TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:taskschedular/components/my_textfield.dart';
+
+import 'package:taskschedular/widgets/my_textfield.dart';
 
 class TimeDataComponents extends StatelessWidget {
   final IconData icon;
