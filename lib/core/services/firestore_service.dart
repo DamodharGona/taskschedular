@@ -35,6 +35,72 @@ class FirestoreService {
     }
   }
 
+  // Future<ApiResponse<T>> getDocumentBasedOnId<T, P>({
+  //   required String collection,
+  //   required String documentId,
+  //   String dataKey = '',
+  //   bool isList = false,
+  //   required Function(Map<String, dynamic>) tFromJson,
+  // }) async {
+  //   try {
+  //     DocumentSnapshot snapshot =
+  //         await _db.collection(collection).doc(documentId).get();
+
+  //     if (snapshot.exists) {
+  //       // Prepare data according to whether it's a list or a single document
+  //       List<dynamic> apiData = [];
+  //       Map<String, dynamic> jsonData = {};
+
+  //       if (isList) {
+  //         if (dataKey.isNotEmpty) {
+  //           // Assuming the document contains a list under a specific key (dataKey)
+  //           final dataList = List<Map<String, dynamic>>.from(
+  //             (snapshot.data() as Map<String, dynamic>)[dataKey],
+  //           );
+
+  //           apiData = dataList.map((item) {
+  //             return {
+  //               ...item,
+  //               'id': documentId, // Add document ID to each item if needed
+  //             };
+  //           }).toList();
+  //         } else {
+  //           // Assuming the snapshot is a QuerySnapshot containing multiple documents
+  //           final querySnapshot = snapshot as QuerySnapshot;
+
+  //           apiData = querySnapshot.docs.map((doc) {
+  //             final data = doc.data() as Map<String, dynamic>;
+  //             data['id'] = doc.id; // Add document ID to each document's data
+  //             return data;
+  //           }).toList();
+  //         }
+  //       } else {
+  //         // Handle the case where the snapshot is a single document (DocumentSnapshot)
+  //         jsonData = snapshot.data() as Map<String, dynamic>;
+  //         jsonData['id'] = snapshot.id; // Add document ID to the data map
+  //       }
+
+  //       // Wrap the data in a map with the key 'data' for consistent structure
+  //       Map<String, dynamic> wrappedData = {
+  //         'data': isList ? apiData : jsonData
+  //       };
+
+  //       return ApiResponse.fromJson<T, P>(
+  //         wrappedData,
+  //         tFromJson,
+  //         isList: isList,
+  //       );
+  //     } else {
+  //       throw Exception('Document does not exist');
+  //     }
+  //   } catch (e, stack) {
+  //     if (kDebugMode) {
+  //       print("Error: $e, Stack: $stack");
+  //     }
+  //     throw Exception('Error getting document: $e');
+  //   }
+  // }
+
   Future<ApiResponse<T>> getDocumentBasedOnId<T, P>({
     required String collection,
     required String documentId,
@@ -47,51 +113,51 @@ class FirestoreService {
           await _db.collection(collection).doc(documentId).get();
 
       if (snapshot.exists) {
-        // Prepare data according to whether it's a list or a single document
-        List<dynamic> apiData = [];
-        Map<String, dynamic> jsonData = {};
-
         if (isList) {
-          if (dataKey.isNotEmpty) {
-            // Assuming the document contains a list under a specific key (dataKey)
-            final dataList = List<Map<String, dynamic>>.from(
-              (snapshot.data() as Map<String, dynamic>)[dataKey],
-            );
+          // Handle the case where we expect a list within the document
+          final dataList = List<Map<String, dynamic>>.from(
+            (snapshot.data() as Map<String, dynamic>)[dataKey],
+          );
 
-            apiData = dataList.map((item) {
-              return {
-                ...item,
-                'id': documentId, // Add document ID to each item if needed
-              };
-            }).toList();
-          } else {
-            // Assuming the snapshot is a QuerySnapshot containing multiple documents
-            final querySnapshot = snapshot as QuerySnapshot;
+          final apiData = dataList.map((item) {
+            return {
+              ...item,
+              'id': documentId, // Add document ID to each item if needed
+            };
+          }).toList();
 
-            apiData = querySnapshot.docs.map((doc) {
-              final data = doc.data() as Map<String, dynamic>;
-              data['id'] = doc.id; // Add document ID to each document's data
-              return data;
-            }).toList();
-          }
+          return ApiResponse.fromJson<T, P>(
+            {'data': apiData},
+            tFromJson,
+            isList: true,
+          );
         } else {
-          // Handle the case where the snapshot is a single document (DocumentSnapshot)
-          jsonData = snapshot.data() as Map<String, dynamic>;
+          // Handle the case where we expect a single document
+          final jsonData = snapshot.data() as Map<String, dynamic>;
           jsonData['id'] = snapshot.id; // Add document ID to the data map
+
+          return ApiResponse.fromJson<T, P>(
+            {'data': jsonData},
+            tFromJson,
+            isList: false,
+          );
         }
-
-        // Wrap the data in a map with the key 'data' for consistent structure
-        Map<String, dynamic> wrappedData = {
-          'data': isList ? apiData : jsonData
-        };
-
-        return ApiResponse.fromJson<T, P>(
-          wrappedData,
-          tFromJson,
-          isList: isList,
-        );
       } else {
-        throw Exception('Document does not exist');
+        // Handle the case where the document does not exist
+        if (isList) {
+          return ApiResponse.fromJson<T, P>(
+            {'data': []},
+            tFromJson,
+            isList: true,
+          );
+        } else {
+          // Optionally, return an empty or default object for single document cases
+          return ApiResponse.fromJson<T, P>(
+            {'data': {}},
+            tFromJson,
+            isList: false,
+          );
+        }
       }
     } catch (e, stack) {
       if (kDebugMode) {

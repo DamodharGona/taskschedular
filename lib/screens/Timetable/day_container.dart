@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:taskschedular/models/day_model_class.dart';
-import 'package:taskschedular/models/timing_model_class.dart';
-import 'package:taskschedular/screens/timetable/data.dart';
+import 'package:taskschedular/models/subject_model.dart';
 import 'package:taskschedular/widgets/time_selection_bottomsheet.dart';
 
 class DayContainer extends StatefulWidget {
-  final List<DayModelClass> exsistingDays;
-  final Function(List<DayModelClass> subjectDays)? subjectsDaysData;
+  final List<DaysInWeek> daysInWeekList;
+  final Function(List<TimeInDay> selectedTimings, String day)? onSelectTiming;
+  final Function(String day, bool isChecked)? onSelectDay;
 
   const DayContainer({
     super.key,
-    this.subjectsDaysData,
-    this.exsistingDays = const [],
+    this.onSelectTiming,
+    this.onSelectDay,
+    this.daysInWeekList = const [],
   });
 
   @override
@@ -20,15 +20,6 @@ class DayContainer extends StatefulWidget {
 }
 
 class _DayContainerState extends State<DayContainer> {
-  List<DayModelClass> dayData = [];
-
-  @override
-  void initState() {
-    super.initState();
-    dayData = days;
-    setState(() {});
-  }
-
   void selectTimings(int index) {
     showModalBottomSheet(
       context: context,
@@ -41,34 +32,22 @@ class _DayContainerState extends State<DayContainer> {
         return SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.95,
           child: TimeSelectionBottomsheet(
-            day: days[index],
-            onSaveBottomSheet: (List<TimingModelClass> selectedTimings) {
-              // Create a new list of selected timings with only checked items
-              List<TimingModelClass> updatedTimings = selectedTimings
-                  .where((time) => time.isChecked)
-                  .map((time) => time)
-                  .toList();
+            day: widget.daysInWeekList[index],
+            onSaveBottomSheet: (List<TimeInDay> selectedTimings) =>
+                widget.onSelectTiming?.call(
+              selectedTimings,
+              widget.daysInWeekList[index].day,
+            ),
+            //  (List<TimeInDay> selectedTimings) {
+            //   daysInWeek[index] =
+            //       daysInWeek[index].copyWith(timings: selectedTimings);
 
-              final dayModel = dayData[index];
+            //   widget.subjectsDaysData?.call(daysInWeek);
 
-              // Create an updated DayModelClass instance
-              final updatedDayModel = dayModel.copyWith(
-                selectedTimings: updatedTimings,
-              );
+            //   setState(() {});
 
-              // Update the dayData list with the new DayModelClass instance
-              setState(() {
-                final index =
-                    dayData.indexWhere((day) => day.id == dayModel.id);
-                if (index != -1) {
-                  dayData[index] = updatedDayModel;
-                }
-              });
-
-              widget.subjectsDaysData?.call(dayData);
-
-              Navigator.pop(context);
-            },
+            //   Navigator.pop(context);
+            // },
           ),
         );
       },
@@ -82,9 +61,9 @@ class _DayContainerState extends State<DayContainer> {
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.zero,
-        itemCount: dayData.length,
+        itemCount: widget.daysInWeekList.length,
         itemBuilder: (context, index) {
-          DayModelClass dayModel = dayData[index];
+          DaysInWeek dayInWeek = widget.daysInWeekList[index];
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -93,17 +72,20 @@ class _DayContainerState extends State<DayContainer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Checkbox(
-                  value: dayModel.isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      dayData = dayData.map((item) {
-                        if (item.id == dayModel.id) {
-                          return item.copyWith(isChecked: value);
-                        }
-                        return item;
-                      }).toList();
-                    });
-                  },
+                  value: dayInWeek.isChecked,
+                  onChanged: (value) =>
+                      widget.onSelectDay?.call(dayInWeek.day, value!),
+                  /* Write a return fn */
+
+                  // setState(() {
+                  //     widget.daysInWeekList.map((item) {
+                  //     if (item.day == dayInWeek.day) {
+                  //       return item.copyWith(isChecked: value);
+                  //     }
+                  //     return item;
+                  //   }).toList();
+                  // });
+
                   activeColor: Colors.blue,
                   checkColor: Colors.white,
                 ),
@@ -112,12 +94,15 @@ class _DayContainerState extends State<DayContainer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(dayModel.day),
+                      Text(dayInWeek.day),
                       Text(
-                        dayModel.selectedTimings.isEmpty
+                        dayInWeek.timings
+                                .where((time) => time.isSelected)
+                                .isEmpty
                             ? 'No timings selected'
-                            : dayModel.selectedTimings
-                                .map((time) => time.timing)
+                            : dayInWeek.timings
+                                .where((time) => time.isSelected)
+                                .map((time) => time.time)
                                 .join(',\n'),
                         style: const TextStyle(color: Colors.grey),
                       )
@@ -125,7 +110,7 @@ class _DayContainerState extends State<DayContainer> {
                   ),
                 ),
                 Visibility(
-                  visible: dayModel.isChecked,
+                  visible: dayInWeek.isChecked,
                   child: IconButton(
                     onPressed: () => selectTimings(index),
                     icon: const Icon(Icons.add_circle_outline_sharp),

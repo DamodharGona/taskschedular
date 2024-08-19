@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:intl/intl.dart';
+
 void showCustomSnackbar(
   BuildContext context, {
   required String message,
@@ -22,4 +24,39 @@ void showCustomSnackbar(
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+String get dayName {
+  DateTime now = DateTime.now();
+  int dayOfWeek = now.weekday;
+
+  switch (dayOfWeek) {
+    case DateTime.monday:
+      return "Monday";
+    case DateTime.tuesday:
+      return "Tuesday";
+    case DateTime.wednesday:
+      return "Wednesday";
+    case DateTime.thursday:
+      return "Thursday";
+    case DateTime.friday:
+      return "Friday";
+    case DateTime.saturday:
+      return "Saturday";
+    case DateTime.sunday:
+      return "Sunday";
+    default:
+      return "Unknown";
+  }
+}
+
+DateTime parseTime(String time) {
+  try {
+    final timeParts = time.split(' - ');
+    final startTime = DateFormat('h:mm a').parse(timeParts[0]);
+    return startTime;
+  } catch (e) {
+    // Handle parsing errors if any
+    return DateTime.now();
+  }
 }

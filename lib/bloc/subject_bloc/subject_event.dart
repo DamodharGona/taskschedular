@@ -4,7 +4,7 @@ part of 'subject_bloc.dart';
 sealed class SubjectEvent {}
 
 final class CreateSubjectEvent extends SubjectEvent {
-  final Subject subject;
+  final SubjectModel subject;
 
   CreateSubjectEvent({required this.subject});
 }
@@ -19,4 +19,14 @@ final class FetchSubjectDataEvent extends SubjectEvent {
   final String subjectId;
 
   FetchSubjectDataEvent({required this.subjectId});
+}
+
+final class ModifyOrEditSubjectDataEvent extends SubjectEvent {
+  final List<TimingModelClass> selectedTimings;
+  final String day;
+
+  ModifyOrEditSubjectDataEvent({
+    required this.day,
+    required this.selectedTimings,
+  });
 }

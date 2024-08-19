@@ -12,13 +12,13 @@ final class SubjectDataUploadingState extends SubjectState {}
 final class SubjectDataUploadedState extends SubjectState {}
 
 final class IndividualSubjectDataFetched extends SubjectState {
-  final Subject subject;
+  final SubjectModel subject;
 
   IndividualSubjectDataFetched({required this.subject});
 }
 
 final class SubjectDataFetchedState extends SubjectState {
-  final DayModelClass selectedDayData;
+  final List<SubjectOfDay> selectedDayData;
 
   SubjectDataFetchedState({required this.selectedDayData});
 }
