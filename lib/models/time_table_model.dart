@@ -1,4 +1,6 @@
-class TimeTableModel {
+import 'package:equatable/equatable.dart';
+
+class TimeTableModel extends Equatable {
   final List<DayOfWeek> daysInWeek;
 
   const TimeTableModel({this.daysInWeek = const <DayOfWeek>[]});
@@ -14,9 +16,12 @@ class TimeTableModel {
           : const <DayOfWeek>[],
     );
   }
+
+  @override
+  List<Object?> get props => [daysInWeek];
 }
 
-class DayOfWeek {
+class DayOfWeek extends Equatable {
   final String day;
   final List<SubjectOfDay> subjects;
 
@@ -34,9 +39,12 @@ class DayOfWeek {
           : const <SubjectOfDay>[],
     );
   }
+
+  @override
+  List<Object?> get props => [day, subjects];
 }
 
-class SubjectOfDay {
+class SubjectOfDay extends Equatable {
   final String day;
   final String subjectId;
   final String subjectName;
@@ -74,4 +82,7 @@ class SubjectOfDay {
       'time': time,
     };
   }
+
+  @override
+  List<Object?> get props => [subjectId, subjectName, time];
 }

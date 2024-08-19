@@ -6,7 +6,6 @@ import 'package:taskschedular/core/constants/firebase_constants.dart';
 import 'package:taskschedular/core/services/firestore_service.dart';
 import 'package:taskschedular/models/subject_model.dart';
 import 'package:taskschedular/models/time_table_model.dart';
-import 'package:taskschedular/models/timing_model_class.dart';
 import 'package:taskschedular/screens/timetable/data.dart';
 
 part 'subject_event.dart';

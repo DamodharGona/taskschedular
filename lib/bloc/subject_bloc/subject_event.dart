@@ -22,12 +22,12 @@ final class FetchSubjectDataEvent extends SubjectEvent {
 }
 
 final class ModifyOrEditSubjectDataEvent extends SubjectEvent {
-  final List<TimingModelClass> selectedTimings;
+  // final List<TimingModelClass> selectedTimings;
   final String day;
 
   ModifyOrEditSubjectDataEvent({
     required this.day,
-    required this.selectedTimings,
+    // required this.selectedTimings,
   });
 }
 

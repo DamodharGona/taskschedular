@@ -1,4 +1,6 @@
-class SubjectModel {
+import 'package:equatable/equatable.dart';
+
+class SubjectModel extends Equatable {
   final String subjectId;
   final String subjectName;
   final List<DaysInWeek> timeTable;
@@ -59,9 +61,12 @@ class SubjectModel {
       timeTable: timeTable ?? this.timeTable,
     );
   }
+
+  @override
+  List<Object?> get props => [subjectId, subjectName, timeTable];
 }
 
-class DaysInWeek {
+class DaysInWeek extends Equatable {
   final String day;
   final bool isChecked;
   final List<TimeInDay> timings;
@@ -116,9 +121,12 @@ class DaysInWeek {
       timings: timings ?? this.timings,
     );
   }
+
+  @override
+  List<Object?> get props => [day, isChecked, timings];
 }
 
-class TimeInDay {
+class TimeInDay extends Equatable {
   final String time;
   final String valueX;
   final bool isSelected;
@@ -171,4 +179,7 @@ class TimeInDay {
       isBlocked: isBlocked ?? this.isBlocked,
     );
   }
+
+  @override
+  List<Object?> get props => [time, isSelected, isBlocked, valueX];
 }
