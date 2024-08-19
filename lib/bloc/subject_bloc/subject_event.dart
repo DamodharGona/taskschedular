@@ -30,3 +30,9 @@ final class ModifyOrEditSubjectDataEvent extends SubjectEvent {
     required this.selectedTimings,
   });
 }
+
+final class FetchAllSubjectsTimingsBasedOnDay extends SubjectEvent {
+  final String dayOfWeek;
+
+  FetchAllSubjectsTimingsBasedOnDay({required this.dayOfWeek});
+}

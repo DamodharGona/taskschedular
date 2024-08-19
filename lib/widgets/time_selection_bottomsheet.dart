@@ -34,35 +34,29 @@ class _TimeSelectionBottomsheetState extends State<TimeSelectionBottomsheet> {
     timingsData = List<TimeInDay>.from(widget.day.timings);
 
     // // Fetch subjects based on the selected day
-    // context
-    //     .read<SubjectBloc>()
-    //     .add(FetchSubjectsBasedOnDayEvent(dayOfWeek: widget.day.day));
+    context
+        .read<SubjectBloc>()
+        .add(FetchAllSubjectsTimingsBasedOnDay(dayOfWeek: widget.day.day));
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SubjectBloc, SubjectState>(
       listener: (context, state) {
-        // if (state is SubjectDataFetchedState) {
-        //   // Update `timingsData` based on `selectedDayData`
-        //   timingsData = timingsData.map((time) {
-        //     final matchingTiming =
-        //         state.selectedDayData.selectedTimings.firstWhere(
-        //       (selected) => selected.timing == time.time,
-        //       orElse: () => const TimingModelClass(),
-        //     );
-
-        //     final isBlocked = matchingTiming.id.isNotEmpty;
-        //     final subjectName = matchingTiming.subjectName;
-
-        //     return time.copyWith(
-        //       isBlocked: isBlocked,
-        //       isSelected: subjectName,
-        //     );
-        //   }).toList();
-
-        //   setState(() {});
-        // }
+        if (state is TimesOfDayDataFetchedState &&
+            state.timesOfDay.isNotEmpty) {
+          for (var fetchedTime in state.timesOfDay) {
+            final index =
+                timingsData.indexWhere((t) => t.time == fetchedTime.time);
+            if (index != -1) {
+              timingsData[index] = timingsData[index].copyWith(
+                valueX: fetchedTime.valueX,
+                isBlocked: fetchedTime.isBlocked,
+              );
+            }
+          }
+          setState(() {});
+        }
       },
       builder: (context, state) {
         return Padding(

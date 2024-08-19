@@ -26,6 +26,8 @@ class SubjectBloc extends Bloc<SubjectEvent, SubjectState> {
 
     on<FetchSubjectDataEvent>(_fetchSubjectData);
 
+    on<FetchAllSubjectsTimingsBasedOnDay>(_fetchAllSubjectsEventBasedOnDay);
+
     on<ModifyOrEditSubjectDataEvent>(_modifyOrEditSubjectData);
   }
 
@@ -33,6 +35,27 @@ class SubjectBloc extends Bloc<SubjectEvent, SubjectState> {
     ModifyOrEditSubjectDataEvent event,
     Emitter<SubjectState> emit,
   ) async {}
+
+  Future<void> _fetchAllSubjectsEventBasedOnDay(
+    FetchAllSubjectsTimingsBasedOnDay event,
+    Emitter<SubjectState> emit,
+  ) async {
+    List<TimeInDay> timeInDayList = [];
+
+    final data = await _getExistingDocumentData(event.dayOfWeek);
+
+    for (final subject in data) {
+      if (selectedSubjectForEdit.subjectId != subject.subjectId) {
+        timeInDayList.add(TimeInDay(
+          isBlocked: true,
+          time: subject.time,
+          valueX: subject.subjectName,
+        ));
+      }
+    }
+
+    emit(TimesOfDayDataFetchedState(timesOfDay: timeInDayList));
+  }
 
   Future<void> _fetchSubjectData(
     FetchSubjectDataEvent event,
@@ -115,9 +138,9 @@ class SubjectBloc extends Bloc<SubjectEvent, SubjectState> {
   ) async {
     try {
       /* fetch doc based on dayofweek */
-      final dayOfWeekData = await _getExistingDocumentData(event.dayOfWeek);
+      final data = await _getExistingDocumentData(event.dayOfWeek);
 
-      emit(SubjectDataFetchedState(selectedDayData: dayOfWeekData));
+      emit(SubjectDataFetchedState(selectedDayData: data));
     } catch (e, stack) {
       if (kDebugMode) {
         print("error: $e");

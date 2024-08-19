@@ -143,6 +143,7 @@ class TimeInDay {
     return <String, dynamic>{
       "time": time,
       "isSelected": isSelected,
+      "valueX": valueX,
     };
   }
 
