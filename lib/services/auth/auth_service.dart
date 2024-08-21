@@ -42,6 +42,8 @@ class AuthService {
         UserCredential userCredential =
             await _auth.signInWithCredential(credential);
 
+        print("userCredential: $userCredential");
+
         if (userCredential.user != null) {
           if (userCredential.additionalUserInfo!.isNewUser) {
             final user = userCredential.user;
