@@ -10,6 +10,7 @@ import 'package:taskschedular/screens/timetable/day_container.dart';
 import 'package:taskschedular/widgets/button.dart';
 import 'package:taskschedular/widgets/my_textfield.dart';
 
+
 class SubjectPage extends StatefulWidget {
   final String subjectId;
 
@@ -146,8 +147,8 @@ class _SubjectPageState extends State<SubjectPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                MyTextField(
-                  hintText: 'Enter Subject Name',
+                MyTextfield(
+                  hintext : 'Enter Subject Name',
                   controller: nameController,
                   color: Colors.grey,
                 ),

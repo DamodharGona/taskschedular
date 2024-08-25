@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class MyTextField extends StatelessWidget {
-  final String hintText;
+class MyTextfield extends StatelessWidget {
+  final String hintext;
   final TextEditingController? controller;
   final Color color;
-  const MyTextField({
+  const MyTextfield({
     super.key,
-    required this.hintText,
+    required this.hintext,
+    required this.controller,
     required this.color,
-    this.controller,
   });
 
   @override
@@ -16,18 +16,16 @@ class MyTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(
-          color: color,
-          fontSize: 23,
-          fontWeight: FontWeight.bold,
-        ),
-        focusedBorder: InputBorder.none,
-        enabledBorder: InputBorder.none,
-      ),
-      style: const TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+
+        border: InputBorder.none,
+        focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(
+              color: Colors.blue,
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(8)),
+        hintText: hintext,
+        hintStyle:  TextStyle(color: color),
       ),
     );
   }

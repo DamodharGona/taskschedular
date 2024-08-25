@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:taskschedular/bloc/auth_bloc/auth_bloc.dart';
 import 'package:taskschedular/bloc/subject_bloc/subject_bloc.dart';
+import 'package:taskschedular/core/services/exam_firestore.dart';
+import 'package:taskschedular/core/services/task_firestore.dart';
+import 'package:taskschedular/cubit/exam/cubit/exam_cubit.dart';
+import 'package:taskschedular/cubit/task_cubit/task_cubit.dart';
 import 'package:taskschedular/screens/on-boarding/splash_screen.dart';
 
 import 'firebase_options.dart';
@@ -21,6 +25,12 @@ void main() async {
       providers: [
         BlocProvider(create: (context) => AuthBloc()),
         BlocProvider(create: (context) => SubjectBloc()),
+        BlocProvider<TaskCubit>(
+          create: (context) => TaskCubit(TaskFirestore()),
+        ),
+        BlocProvider<ExamCubit>(
+          create: (context) => ExamCubit(ExamFirestore()),
+        ),
       ],
       child: const MyApp(),
     ),

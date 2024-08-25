@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:taskschedular/widgets/my_textfield.dart';
+
+
 
 class TimeDataComponents extends StatelessWidget {
   final IconData icon;
@@ -26,8 +27,8 @@ class TimeDataComponents extends StatelessWidget {
           const SizedBox(width: 15),
           SizedBox(
             width: 110,
-            child: MyTextField(
-              hintText: title,
+            child: MyTextfield(
+              hintext: title,
               color: Colors.black,
               controller: controller,
             ),
